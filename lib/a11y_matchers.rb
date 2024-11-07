@@ -3,6 +3,7 @@ module A11yMatchers
   JS_PATH = File.join(GEM_ROOT, "assets/build/")
 
   require 'a11y_matchers/helpers/alfa'
+  require 'a11y_matchers/helpers/kayle'
   require 'a11y_matchers/matchers'
 end
 

@@ -3,6 +3,7 @@ const path = require('path')
 require('esbuild').build({
     entryPoints: [
         'assets/alfa.js',
+        'assets/kayle.js',
     ],
     bundle: true,
     format: 'iife',
