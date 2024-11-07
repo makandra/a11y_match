@@ -60,11 +60,46 @@ module A11yMatchers
       end
     end
 
+    class Qualweb
+      def initialize()
+      end
+
+      def matches?(page)
+        res = page.evaluate_script <<-JS
+          await window.qualweb.startAudit()
+        JS
+        # if res['error']
+        #   @errors = [res['error']]
+        #   @warnings = []
+        # else
+        #   @errors = res['messages']['failures']
+        #   @warnings = res['messages']['warnings']
+        # end
+        debugger
+        !res['passed']
+      end
+
+      def failure_message
+        "expected ... to ... , but it ..."
+      end
+
+      def failure_message_when_negated
+        "expected ... to not ..., but it ..."
+      end
+
+      def description
+        "check ..."
+      end
+    end
     def have_kayle_issues(*args)
       Kayle.new
     end
     def have_alfa_issues(*args)
       Alfa.new
+    end
+
+    def have_qualweb_issues(*args)
+      Qualweb.new
     end
   end
 end

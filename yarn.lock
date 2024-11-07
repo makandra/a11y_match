@@ -136,6 +136,35 @@
   resolved "https://registry.yarnpkg.com/@fastify/busboy/-/busboy-2.1.1.tgz#b9da6a878a371829a0502c9b6c1c143ef6663f4d"
   integrity sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==
 
+"@qualweb/act-rules@^0.6.39":
+  version "0.6.39"
+  resolved "https://registry.yarnpkg.com/@qualweb/act-rules/-/act-rules-0.6.39.tgz#f356913b67480fabd0b1997dff0832cca62098ec"
+  integrity sha512-J/QlWp+PJXnxQAXiUdYBhvvVGrxaH84/U3WIMYfXxoCr83gjMleWlidCynffK1YoAr9bPj0QoLaZESROPks6HA==
+
+"@qualweb/locale@^0.1.19":
+  version "0.1.19"
+  resolved "https://registry.yarnpkg.com/@qualweb/locale/-/locale-0.1.19.tgz#64f8b778183379c5c82fbb4dde41467182bb53d7"
+  integrity sha512-M51ocTE8s4U9haxyxG5iOYD7i58TFtmXyKhNHjzbQbMY7tnVVE5LSnRu81PjW8E/0ucF3R+3h719i9+de4KCgQ==
+  dependencies:
+    lodash.clonedeep "^4.5.0"
+
+"@qualweb/qw-element@0.2.16":
+  version "0.2.16"
+  resolved "https://registry.yarnpkg.com/@qualweb/qw-element/-/qw-element-0.2.16.tgz#4313822ae8062b20fe5a75fcae2e50b60acf11fe"
+  integrity sha512-cJl7UFx7+6EHLGt7S3sWDdSXhnGhOpMbV8KVcm8M7rj1QUrgYPUYsOg5PyBehEJ7fK0DG5Rit3yus6Comx/UmQ==
+
+"@qualweb/qw-page@^0.2.23":
+  version "0.2.23"
+  resolved "https://registry.yarnpkg.com/@qualweb/qw-page/-/qw-page-0.2.23.tgz#f063bbba60bda0600dee78af12980c8f201d7695"
+  integrity sha512-R8LOlv2xMJKLyRo8r26M5aV7WI/wa+HwyTPq9wdSfKu26xdXh89Mvy/AEQ4TG95xROo5jfplY+CbgcdxeJSG3w==
+  dependencies:
+    "@qualweb/qw-element" "0.2.16"
+
+"@qualweb/wcag-techniques@^0.3.22":
+  version "0.3.22"
+  resolved "https://registry.yarnpkg.com/@qualweb/wcag-techniques/-/wcag-techniques-0.3.22.tgz#841cd42fe3f554409b5ff4d7497b8aa3b41dacb4"
+  integrity sha512-U0gV5d19WtCZOE7FJoL7Ass18TQO7sg1m0FTGtvHdk2MUffDzEnmTY1BZMR/6qPVYZCdzyxEqmaIi9CrLX/vqQ==
+
 "@siteimprove/alfa-act@^0.92.0":
   version "0.92.0"
   resolved "https://npm.pkg.github.com/download/@Siteimprove/alfa-act/0.92.0/d6d06b5f6e4eb1c6e6a1fd3d0f8561810b658706#d6d06b5f6e4eb1c6e6a1fd3d0f8561810b658706"
@@ -2172,6 +2201,11 @@ ky@^0.33.3:
   version "0.33.3"
   resolved "https://registry.yarnpkg.com/ky/-/ky-0.33.3.tgz#bf1ad322a3f2c3428c13cfa4b3af95e6c4a2f543"
   integrity sha512-CasD9OCEQSFIam2U8efFK81Yeg8vNMTBUqtMOHlrcWQHqUX3HeCl9Dr31u4toV7emlH8Mymk5+9p0lL6mKb/Xw==
+
+lodash.clonedeep@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
+  integrity sha512-H5ZhCF25riFd9uB5UCkVKo61m3S/xZk1x4wA6yp/L3RFP6Z/eHH1ymQcGLo7J3GMPfm0V/7m1tryHuGVxpqEBQ==
 
 lru-cache@^6.0.0:
   version "6.0.0"

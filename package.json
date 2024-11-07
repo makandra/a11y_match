@@ -1,5 +1,9 @@
 {
   "dependencies": {
+    "@qualweb/act-rules": "^0.6.39",
+    "@qualweb/locale": "^0.1.19",
+    "@qualweb/qw-page": "^0.2.23",
+    "@qualweb/wcag-techniques": "^0.3.22",
     "@siteimprove/alfa-act": "^0.92.0",
     "@siteimprove/alfa-device": "^0.92.0",
     "@siteimprove/alfa-dom": "^0.92.0",
