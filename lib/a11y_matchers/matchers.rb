@@ -1,105 +1,59 @@
+require "rspec/expectations"
+require "rspec/matchers"
+require "rspec/core"
+require_relative "./matchers/alfa"
+require_relative "./matchers/axe"
+require_relative "./matchers/qualweb"
+require_relative "./matchers/kayle"
+
 module A11yMatchers
   module Matchers
-    class Alfa
-      def initialize()
-      end
-
-      def matches?(page)
-        res = page.evaluate_script <<-JS
-          await window.alfa.startRubyAudit()
-        JS
-
-        @errors = res['failures']
-        @warnings = res['warnings']
-        debugger
-        !res['passed']
-      end
-
-      def failure_message
-          "expected ... to ... , but it ..."
-      end
-
-      def failure_message_when_negated
-          "expected ... to not ..., but it ..."
-      end
-
-      def description
-        "check ..."
-      end
-    end
-
-    class Kayle
-      def initialize()
-      end
-
-      def matches?(page)
-        res = page.evaluate_script <<-JS
-          await window.kayle.startAudit()
-        JS
-
-        if res['error']
-          @errors = [res['error']]
-          @warnings = []
-        else
-          @errors = res['messages']['failures']
-          @warnings = res['messages']['warnings']
-        end
-        !res['passed']
-      end
-
-      def failure_message
-        "expected ... to ... , but it ..."
-      end
-
-      def failure_message_when_negated
-        "expected ... to not ..., but it ..."
-      end
-
-      def description
-        "check ..."
-      end
-    end
-
-    class Qualweb
-      def initialize()
-      end
-
-      def matches?(page)
-        res = page.evaluate_script <<-JS
-          await window.qualweb.startAudit()
-        JS
-        # if res['error']
-        #   @errors = [res['error']]
-        #   @warnings = []
-        # else
-        #   @errors = res['messages']['failures']
-        #   @warnings = res['messages']['warnings']
-        # end
-        debugger
-        !res['passed']
-      end
-
-      def failure_message
-        "expected ... to ... , but it ..."
-      end
-
-      def failure_message_when_negated
-        "expected ... to not ..., but it ..."
-      end
-
-      def description
-        "check ..."
-      end
-    end
-    def have_kayle_issues(*args)
-      Kayle.new
-    end
     def have_alfa_issues(*args)
       Alfa.new
     end
 
+    def have_axe_issues(*args)
+      Axe.new
+    end
+
+    def have_kayle_issues(*args)
+      Kayle.new
+    end
+
     def have_qualweb_issues(*args)
       Qualweb.new
+    end
+
+    RSpec::Matchers.define :have_a11y_issues do
+      match do |page|
+        aggregate_failures "a11y issues" do
+          expect(page).to have_alfa_issues
+          expect(page).to have_axe_issues
+          expect(page).to have_kayle_issues
+          expect(page).to have_qualweb_issues
+        end
+      end
+
+      match_when_negated do |page|
+        begin
+          aggregate_failures "a11y issues" do
+            expect(page).not_to have_alfa_issues
+            expect(page).not_to have_axe_issues
+            expect(page).not_to have_kayle_issues
+            expect(page).not_to have_qualweb_issues
+          end
+        rescue RSpec:: Expectations::ExpectationNotMetError,
+          RSpec::Expectations::MultipleExpectationsNotMetError => error
+          @error = error
+          raise error
+        end
+      end
+      failure_message do
+        @error.message
+      end
+      failure_message_when_negated do
+        @error.message
+      end
     end
   end
 end

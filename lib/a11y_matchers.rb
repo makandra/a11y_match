@@ -5,6 +5,8 @@ module A11yMatchers
   require 'a11y_matchers/helpers/alfa'
   require 'a11y_matchers/helpers/kayle'
   require 'a11y_matchers/helpers/qualweb'
+  require 'a11y_matchers/helpers/axe'
+  require 'a11y_matchers/helpers/a11y'
   require 'a11y_matchers/matchers'
 end
 
