@@ -29,22 +29,22 @@ const startAudit = async () => {
     const result = earlAssertions.reduce((intermediateResult, assertion) => {
         const outcome = assertion["earl:result"]["earl:outcome"]["@id"]
         const key = assertion["earl:test"]["@id"] + assertion["earl:result"]["earl:info"] + assertion["earl:result"]["earl:outcome"]["@id"] + outcome
+        const newPointers = [
+            assertion["earl:result"]["earl:pointer"]["ptr:expression"] ??
+            assertion["earl:result"]["earl:pointer"]["ptr:groupPointer"]["@list"].map(pointer => pointer["ptr:expression"])
+        ].flat()
         if (key in intermediateResult[outcome]) {
-            intermediateResult[outcome][key]["occurences"].push(
-                assertion["earl:result"]["earl:pointer"]["ptr:expression"]
-            )
+            intermediateResult[outcome][key]["occurences"].push(...newPointers)
         } else {
-            intermediateResult[outcome][key] =  {
+            intermediateResult[outcome][key] = {
                 "url": assertion["earl:test"]["@id"],
                 "info": assertion["earl:result"]["earl:info"].replace(/\s{2,}/g, ' '),
                 "outcome": assertion["earl:result"]["earl:outcome"]["@id"],
-                "occurences": [
-                    assertion["earl:result"]["earl:pointer"]["ptr:expression"]
-                ]
+                "occurences": newPointers
             }
         }
         return intermediateResult
-    }, { "earl:failed": {}, "earl:cantTell": {} });
+    }, {"earl:failed": {}, "earl:cantTell": {}});
 
     // Inspired by https://github.com/Siteimprove/alfa/blob/db3bbff5fa0f7d140859bc32e95d899cef39622e/packages/alfa-cli/bin/alfa/command/audit/run.ts#L91-L108
     // const passedOutcomes = outcomes.filter(outcome => Outcome.isPassed(outcome))
