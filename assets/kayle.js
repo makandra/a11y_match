@@ -74,6 +74,9 @@ async function startAudit() {
             intermediateResult[type][key]["occurences"].push(
                 elementName
             )
+            intermediateResult[type][key]["elements"].push(
+                element
+            )
         } else {
             intermediateResult[type][key] =  {
                 "url": code,
@@ -81,6 +84,9 @@ async function startAudit() {
                 "outcome": type === "error" ? "earl:failed" : "earl:cantTell",
                 "occurences": [
                     elementName
+                ],
+                "elements": [
+                    element
                 ]
             }
         }

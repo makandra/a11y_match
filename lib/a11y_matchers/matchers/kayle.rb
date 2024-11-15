@@ -13,6 +13,10 @@ module A11yMatchers
         JS
 
         @errors = @result['errors']
+        # Use Capybara's xpath calculation so I don't have to do it in JS
+        for error in @errors
+          error["occurences"] = error["elements"].map { |element| element.path}
+        end
         @warnings = @result['warnings']
         !@result['passed']
       end
