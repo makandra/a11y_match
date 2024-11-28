@@ -26,21 +26,27 @@ module A11yMatchers
 
     RSpec::Matchers.define :have_a11y_issues do
       match do |page|
-        aggregate_failures "a11y issues" do
-          expect(page).to have_alfa_issues
-          expect(page).to have_axe_issues
-          expect(page).to have_kayle_issues
-          expect(page).to have_qualweb_issues
+        begin
+          aggregate_failures "a11y issues" do
+            if A11yMatchers.configuration.alfa.enabled then expect(page).to have_alfa_issues else end
+            if A11yMatchers.configuration.axe.enabled then expect(page).to have_axe_issues else end
+            if A11yMatchers.configuration.kayle.enabled then expect(page).to have_kayle_issues else end
+            if A11yMatchers.configuration.qualweb.enabled then expect(page).to have_qualweb_issues else end
+          end
+        rescue RSpec:: Expectations::ExpectationNotMetError,
+          RSpec::Expectations::MultipleExpectationsNotMetError => error
+          @error = error
+          raise error
         end
       end
 
       match_when_negated do |page|
         begin
           aggregate_failures "a11y issues" do
-            expect(page).not_to have_alfa_issues
-            expect(page).not_to have_axe_issues
-            expect(page).not_to have_kayle_issues
-            expect(page).not_to have_qualweb_issues
+            if A11yMatchers.configuration.alfa.enabled then expect(page).not_to have_alfa_issues else end
+            if A11yMatchers.configuration.axe.enabled then expect(page).not_to have_axe_issues else end
+            if A11yMatchers.configuration.kayle.enabled then expect(page).not_to have_kayle_issues else end
+            if A11yMatchers.configuration.qualweb.enabled then expect(page).not_to have_qualweb_issues else end
           end
         rescue RSpec:: Expectations::ExpectationNotMetError,
           RSpec::Expectations::MultipleExpectationsNotMetError => error
@@ -57,4 +63,3 @@ module A11yMatchers
     end
   end
 end
-
