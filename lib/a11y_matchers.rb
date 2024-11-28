@@ -9,5 +9,5 @@ module A11yMatchers
   require_relative 'a11y_matchers/helpers/a11y'
   require_relative 'a11y_matchers/matchers'
   require_relative 'a11y_matchers/configuration'
+  require_relative 'a11y_matchers/logger'
 end
-

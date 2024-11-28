@@ -1,26 +1,43 @@
-require_relative "./error_message"
+require_relative "./error_message_constructor"
+require 'benchmark'
 
 module A11yMatchers
   module Matchers
     class Qualweb
-      include ErrorMessage
-      def initialize()
-      end
+      include ErrorMessageConstructor
+
+      def initialize() end
 
       def matches?(page)
-        @result = Capybara.current_session.evaluate_script <<-JS
-          await window.qualweb.startAudit()
-        JS
-        # if res['error']
-        #   @errors = [res['error']]
-        #   @warnings = []
-        # else
-        #   @errors = res['messages']['failures']
-        #   @warnings = res['messages']['warnings']
-        # end
+        configuration = A11yMatchers.configuration
+        arguments = {
+          excluded_rules: configuration.qualweb.excluded_rules,
+          included_rules: configuration.qualweb.included_rules,
+        }
+
+        time = Benchmark.measure do
+          Capybara.using_wait_time(configuration.audit_wait_time) do
+            @result = page.evaluate_async_script <<-JS, arguments
+              [auditOptions, done] = arguments
+              window.qualweb.startAudit(auditOptions)
+                .then(result => done(result))
+                .catch(error => done({error: error, message: error.message, stacktrace: error.stack}))
+            JS
+          end
+        end
+        A11yMatchers.time_logger.add(Logger::ERROR, "#{page.current_path},#{time.real.to_s}", "qualweb")
+
         @errors = @result['errors']
         @warnings = @result['warnings']
-        !@result['passed']
+
+        log_message(
+          "QualWeb",
+          page.current_path,
+          configuration.on_violation == :log ? @errors : [],
+          configuration.on_warning == :log ? @warnings : [],
+        )
+
+        configuration.on_violation == :fail && @errors.present? || configuration.on_warning == :fail && @warnings.present?
       end
 
       def failure_message
@@ -28,7 +45,7 @@ module A11yMatchers
       end
 
       def failure_message_when_negated
-        construct_message("QualWeb", @result)
+        construct_message("QualWeb", @errors, A11yMatchers.configuration.on_warning == :fail ? @warnings : [])
       end
 
       def description
