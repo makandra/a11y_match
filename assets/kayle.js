@@ -2,37 +2,6 @@
 // I use some alfa methods to generate nice URLs, increases coupling of testing tools
 import { Criterion, Technique } from "@siteimprove/alfa-wcag"
 
-// Include code from https://github.com/a11ywatch/kayle/blob/main/kayle/lib/runners/htmlcs.ts here so that I don't have to include two files for HTMLCS
-const parseMessages = (messages) =>
-  messages.map((message) => {
-    return {
-      type: message.type,
-      message: message.message,
-      code: message.code,
-      element: undefined, // tbd
-    }
-  })
-
-const parseAndGroupMessages = (messages) =>
-  messages.reduce(
-    (groupedMessages, message) => {
-      var type
-      if (message.type === "error") {
-        type = "failures"
-      } else if (message.type === "warning") type = "warnings"
-      else if (message.type === "notice") type = "notice"
-      else type = "passed"
-      groupedMessages[type].push({
-        type: message.type,
-        message: message.message,
-        code: message.code,
-        element: undefined, // construct xpath from dom element
-      })
-      return groupedMessages
-    },
-    { failures: [], warnings: [], notice: [], passed: [] }
-  )
-
 function formatCode(code) {
   const extractNumbers = (string) =>
     string.match(/([0-9]+_)*[0-9]/)[0].replaceAll("_", ".")
@@ -65,9 +34,24 @@ async function startAudit() {
   else if (wcagLevels.includes("wcag_a"))
     sniffs = sniffs.union(new Set(HTMLCS_WCAG2A.sniffs[0].include))
 
-    sniffs = sniffs.union(includedRules).difference(excludedRules)
+  sniffs = sniffs.union(includedRules).difference(excludedRules)
   HTMLCS.messages = []
   // TODO reset tags, standard and duplicates (I don't know how yet)
+
+  // Initialize our new sniff as a copy of WCAG2AA with the custom set of sniffs calculated above
+  // See: https://github.com/a11ywatch/kayle/blob/main/fast_htmlcs/HTMLCS.ts#L365
+  // const registerPromise = new Promise((resolve, reject) => {
+  //     HTMLCS.registerStandard("WCAG2AAA", "WCAG2AAA", () => {
+  //         resolve
+  //     }, () => {
+  //         reject
+  //     }, {
+  //         // This overwrites the set of sniffs to be run
+  //         // See: (https://github.com/a11ywatch/kayle/blob/main/fast_htmlcs/HTMLCS.ts#L386)
+  //         include: [...sniffs, ...includedRules].filter(rule => !excludedRules.includes(rule))
+  //     })
+  // })
+  // await registerPromise
   sniffs.forEach((sniff) => HTMLCS.registerSniff("WCAG2AAA", sniff))
   const promise = new Promise((resolve, reject) => {
     HTMLCS.run(() => {

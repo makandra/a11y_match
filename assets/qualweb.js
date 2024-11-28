@@ -7,8 +7,6 @@ import {
   generateEARLReport,
 } from "@qualweb/earl-reporter"
 
-const earlReporter = require("@qualweb/earl-reporter")
-
 const en = require("@qualweb/locale/dist/locales/en.json")
 
 function getEvaluator() {
