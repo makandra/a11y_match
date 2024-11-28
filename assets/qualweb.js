@@ -166,9 +166,9 @@ async function startAudit(auditOptions) {
   })
 }
 
-window.wcag = new WCAGTechniques({ translate: en })
-window.act = new ACTRules({ translate: en })
-window.bestPractices = new BestPractices({ translate: en })
+window.wcag = new WCAGTechniques({ translate: en, fallback: en })
+window.act = new ACTRules({ translate: en, fallback: en })
+window.bestPractices = new BestPractices({ translate: en, fallback: en })
 
 window.qualweb = {
   startAudit,
