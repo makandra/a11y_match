@@ -1,4 +1,4 @@
-const { copy } = require('esbuild-plugin-copy')
+const { copy } = require("esbuild-plugin-copy")
 const textReplace = require("esbuild-plugin-text-replace")
 
 require("esbuild").build({
@@ -23,12 +23,12 @@ require("esbuild").build({
       ],
     }),
     copy({
-      resolveFrom:'cwd',
+      resolveFrom: "cwd",
       assets: {
         from: ["./node_modules/fast_htmlcs/build/HTMLCS.js"],
         to: ["./assets/build/htmlcs.js"],
-      }
-    })
+      },
+    }),
   ],
   treeShaking: true,
   minify: true,

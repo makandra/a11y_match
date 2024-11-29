@@ -12,6 +12,7 @@ import rules, { ARIA, BestPractice } from "@siteimprove/alfa-rules"
 import { Conformance, Criterion, Technique } from "@siteimprove/alfa-wcag"
 import { Refinement } from "@siteimprove/alfa-refinement"
 const { and, or } = Refinement
+import { URL as alfaURL } from "@siteimprove/alfa-url"
 
 async function startAudit(auditOptions) {
   const isNotCriterion = (rule) => !rule.hasRequirement(Criterion.isCriterion)
@@ -75,19 +76,20 @@ async function startAudit(auditOptions) {
 
   // Parse Document into the correct structure (see https://github.com/Siteimprove/alfa/discussions/1254)
   const alfaDocument = Node.from(await dom.Native.fromNode(window.document))
-  const oracleQuestions = []
-  const oracle = (answers, t, url, used, page) => {
-    oracleQuestions.push({ answers, t, url, used, page })
-    return Future.now(None)
-  }
+  // const oracleQuestions = []
+  // const oracle = (answers, t, url, used, page) => {
+  //   debugger
+  //   oracleQuestions.push({ answers, t, url, used, page })
+  //   return Future.now(None)
+  // }
   const input = Page.of(
     Request.empty(),
-    Response.of(window.location.href, 200),
+    Response.of(alfaURL.parse(window.location.href).getUnsafe(), 200),
     alfaDocument,
     Device.standard()
   )
   const outcomes = [
-    ...(await Audit.of(input, filteredRules, oracle).evaluate()),
+    ...(await Audit.of(input, filteredRules).evaluate()),
   ]
   // template: https://github.com/Siteimprove/alfa-integrations/blob/main/packages/alfa-formatter-earl/src/earl.ts#L22
   // const earlSubject = input.toEARL()
