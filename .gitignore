@@ -1,4 +1,5 @@
 assets/build/*.js
 .idea
 node_modules
+.byebug_history
 log/*.log
