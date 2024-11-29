@@ -32,7 +32,7 @@ module A11yMatchers
           configuration.on_violation == :log ? @errors : [],
           configuration.on_warning == :log ? @warnings : [],
         )
-        configuration.on_violation == :fail && @errors.present? || configuration.on_warning == :fail && @warnings.present?
+        configuration.on_violation == :fail && !@errors.empty? || configuration.on_warning == :fail && @warnings.empty?
       end
 
       def failure_message

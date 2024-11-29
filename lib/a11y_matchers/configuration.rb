@@ -14,17 +14,18 @@ module A11yMatchers
   end
 
   class Configuration
-    attr_accessor :on_violation, :on_warning, :audit_wait_time
+    attr_accessor :on_violation, :on_warning, :audit_wait_time, :log_directory
     attr_reader :alfa, :kayle, :axe, :qualweb
     def initialize
       @on_violation = :fail # :fail | :log
       @on_warning = :ignore # :fail | :log | :ignore
       @audit_wait_time = 5 * 60 # TODO set lower for prod
+      @log_directory = (defined?(Rails) ? Rails.root : GEM_ROOT).join('log')
 
       @alfa = ToolConfiguration.new(enabled: true, included_rules: [:wcag_aa, :best_practices, :techniques, :aria])
       @axe = ToolConfiguration.new(enabled: true, included_rules: [:wcag_aa, :best_practices])
       @kayle = ToolConfiguration.new(enabled: true, included_rules: [:wcag_aa])
-      @qualweb = ToolConfiguration.new(enabled: true, included_rules: [ :wcag_aa, :best_practices])
+      @qualweb = ToolConfiguration.new(enabled: true, included_rules: [ :wcag_aa])
     end
   end
 end

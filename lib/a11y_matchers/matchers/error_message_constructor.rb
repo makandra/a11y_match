@@ -22,13 +22,13 @@ module A11yMatchers
       end
 
       def construct_error_message(errors)
-        "#{errors.length} #{"error".pluralize(errors.length)}:\n" +
+        "#{errors.length} #{errors.length == 1 ? "error" : "errors"}:\n" +
           errors.each_with_index.map { |error, index| "#{index + 1}) Error: #{describe_outcome(error)}" }.join("\n\n") +
           "\n"
       end
 
       def construct_warning_message(warnings)
-        "#{warnings.length} #{"warning".pluralize(warnings.length)}:\n" +
+        "#{warnings.length} #{warnings.length == 1 ? "warning" : "warnings"}:\n" +
           warnings.each_with_index.map { |warning, index| "#{index + 1}) Warning: #{describe_outcome(warning)}" }.join("\n\n") +
           "\n"
       end

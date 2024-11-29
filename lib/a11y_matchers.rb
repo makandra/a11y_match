@@ -1,6 +1,6 @@
 module A11yMatchers
-  GEM_ROOT = Gem::Specification.find_by_name('a11y_matchers').gem_dir
-  JS_PATH = File.join(GEM_ROOT, "assets/build/")
+  GEM_ROOT = Pathname(Gem::Specification.find_by_name('a11y_matchers').gem_dir)
+  JS_PATH = GEM_ROOT.join("assets","build")
 
   require_relative 'a11y_matchers/helpers/alfa'
   require_relative 'a11y_matchers/helpers/kayle'

@@ -12,7 +12,7 @@ module A11yMatchers
     private
 
     def new_time_logger
-      logger = Logger.new(Rails.root.join('log', 'a11y_matcher_runtime.log'))
+      logger = Logger.new(A11yMatchers.configuration.log_directory.join('a11y_matcher_runtime.log'))
       logger.formatter = proc do |severity, datetime, progname, msg|
         "#{datetime.strftime('%Y-%m-%d %H:%M:%S')},#{progname},#{msg}\n"
       end
@@ -20,7 +20,7 @@ module A11yMatchers
     end
 
     def new_logger
-      logger = Logger.new(Rails.root.join('log', 'a11y_matcher.log'), "daily", 1)
+      logger = Logger.new(A11yMatchers.configuration.log_directory.join('a11y_matcher.log'), "daily", 1)
       original_formatter = Logger::Formatter.new
       original_formatter.datetime_format = '%R'
       # Prepend each line with metadata
