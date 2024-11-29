@@ -158,7 +158,77 @@ x Specs failed.
 ```
 
 ## Configuration
+There are general options (affecting all tools) and tool specific options.
+
+### General Configuration Options
+The general configuration options are (with the defaults as shown here):
+```Ruby
+A11yMatchers.configure do |config|
+  config.on_violation = :fail # Other options: :log
+  config.on_warning = :ignore # Other options: :fail | :log
+  config.audit_wait_time = 10 # Maximum runtime of tools before a timeout occurs
+  config.log_directory = "" # Defaults to RAILS_ROOT/log for rails projects and otherwise to the gem root directory
+end
+```
+`on_violation` and `on_warning` allow configuring the behaviour when tools find accessibility errors for easier integration into existing projects.
+When integrating accessibility testing into a project, you can only log the errors at first to get an overview of the amount of errors.
+- `:fail`: Errors and Warnings make the matcher fail and lead to red tests and get shown in the test output
+- `:log`: Errors and Warnings don't make matchers fail, the error/ warning only gets written to the log and don't appear in the test output
+- `:ignore` (Only for warnings): Warnings don't fail tests, don't appear in the test output and don't get written to the log
+
+### Tool specific configuration options
+Below are the possible configuration options as example for the `alfa` tool. 
+The options are the same, across all tools but possible values differ.
+Configure each tool by setting `config.alfa`, `config.axe`, `config.qualweb`, or `config.kayle`
+```Ruby
+A11yMatchers.configure do |config|
+  # Controls if the tool is run when using the generic `have_a11y_issues` matcher
+  config.alfa.enabled = true 
+  
+  # Controls which rules are run by the tool, see below for possible values for each tool
+  config.alfa.included_rules = [] # default value is tool specific
+  
+  # Exclude specific rules from being run by the tool by their id
+  config.alfa.excluded_rules = []
+end
+```
+- All tools support the options `:wcag_a`, `:wcag_aa`, `:wcag_aaa` to enable all rules of a specific WCAG level
+
+#### Alfa
+- Default value for included_rules: `[:wcag_aa, :best_practices, :techniques, :aria]`
+- Other possible values to include a set of rules: `misc_rules` (for rules without any tags)
+- Rule IDs (to include and exclude rules): of format `SIA-RXX` `XX` is a unique number, see the [list of rules](https://alfa.siteimprove.com/rules)
+
+#### Axe
+- Default value for included_rules: `[:wcag_aa, :best_practices]`
+- Other possible values to include a set of rules: `"EN-301-549"` (for rules specified by the [EU standard](https://accessible-eu-centre.ec.europa.eu/content-corner/digital-library/en-3015492021-accessibility-requirements-ict-products-and-services_en))
+- Rule IDs (to include and exclude rules): see the [list of rules](https://dequeuniversity.com/rules/axe/html)
+
+#### Qualweb
+- Default value for included_rules: `[:wcag_aa]`
+  - This includes both [act](https://github.com/qualweb/qualweb/tree/main/packages/act-rules) and [WCAG](https://github.com/qualweb/qualweb/tree/main/packages/wcag-techniques) rules of this level (qualweb divides them into separate rulesets)
+- Other possible values to include a set of rules: `:best_practices` to enable the [best-practices](https://github.com/qualweb/qualweb/tree/main/packages/best-practices) ruleset (disabled by default as it is not very high quality)
+- Rule IDs (to include and exclude rules): see above linked lists of rules
+  - `QW-BP-XX` for best practice rules
+  - `QW-ACT-RXX` or 6 letter ACT Rule ID like `5f99a7` for ACT rules
+  - `QW-WCAG-TXX` for WCAG rules (Qualweb calls them techniques)
+
+#### Kayle
+- Default value for included_rules: `[:wcag_aa]`
+- Rule IDs (to include and exclude rules): of format `"Principle1.Guideline1_1.1_1_1"`, see the [list of rules](https://github.com/a11ywatch/kayle/blob/main/fast_htmlcs/Standards/WCAG2AAA/ruleset.ts)
+
+## Contributing
 TBD
 
-## Information about the tools
-TODO
+
+## License
+This gem's code is open source under the terms of the [MIT License](https://opensource.org/licenses/MIT)
+
+Currently, the JavaScript code of all accessibility testing tools is bundled within this gem. 
+Therefore, it contains code licensed by other MIT compatible licenses as listed here:
+
+- [Axe](https://github.com/dequelabs/axe-core): [MPL-2.0](https://opensource.org/license/mpl-2-0)
+- [Alfa](https://github.com/siteimprove/alfa): MIT
+- [`fast_htmlcs` runner from Kayle](https://github.com/a11ywatch/kayle): MIT and [BSD-3-Clause](https://opensource.org/license/bsd-3-clause) because it's a fork of [HTMLCS](https://github.com/squizlabs/HTML_CodeSniffer)
+- [QualWeb](https://github.com/qualweb/qualweb): [ISC](https://opensource.org/license/ISC)
+

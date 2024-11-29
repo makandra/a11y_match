@@ -14,8 +14,8 @@ module A11yMatchers
   end
 
   class Configuration
-    attr_accessor :on_violation, :on_warning, :audit_wait_time, :log_directory
-    attr_reader :alfa, :kayle, :axe, :qualweb
+    attr_accessor :on_violation, :on_warning, :audit_wait_time
+    attr_reader :alfa, :kayle, :axe, :qualweb, :log_directory
     def initialize
       @on_violation = :fail # :fail | :log
       @on_warning = :ignore # :fail | :log | :ignore
@@ -26,6 +26,10 @@ module A11yMatchers
       @axe = ToolConfiguration.new(enabled: true, included_rules: [:wcag_aa, :best_practices])
       @kayle = ToolConfiguration.new(enabled: true, included_rules: [:wcag_aa])
       @qualweb = ToolConfiguration.new(enabled: true, included_rules: [ :wcag_aa])
+    end
+
+    def log_directory=(path)
+      @log_directory = path.is_a?(Pathname) ? path : Pathname.new(path)
     end
   end
 end
