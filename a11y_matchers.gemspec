@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.description = "includes RSpec matchers for Deque's axe, kayle's fork of HTMLCS, SiteImprove's alfa and QualWeb"
   s.authors     = ["Daniel Schulz"]
   s.email       = 'daniel.schulz@makandra.de'
-  s.files       = ["lib/rspec-a11y_matchers.rb"] # TODO add all files here
+  s.files       = Dir['lib/**/*'] + Dir['assets/build/*.js'] + %w(Gemfile LICENSE.txt README.md LICENSE-3RD-PARTY.txt a11y_matchers.gemspec)
   s.homepage    = 'https://makandra.de'
   s.metadata    = { "source_code_uri" => "https://github.com/example/example" }
 
