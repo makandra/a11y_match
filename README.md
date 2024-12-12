@@ -1,3 +1,6 @@
+[!IMPORTANT]
+This repository is part of a research project for a thesis. Don't use it for production yet.
+
 # A11y_matchers
 
 This ruby gem integrates different accessibility testing tools into Capybara testing with RSpec.
@@ -251,6 +254,10 @@ end
 - Rule IDs (to include and exclude rules): of format `"Principle1.Guideline1_1.1_1_1"`, see the [list of rules](https://github.com/a11ywatch/kayle/blob/main/fast_htmlcs/Standards/WCAG2AAA/ruleset.ts)
 
 ## Contributing
+
+TBD
+
+## TODOs
 
 TBD
 
