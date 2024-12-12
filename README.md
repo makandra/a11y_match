@@ -1,5 +1,5 @@
-[!IMPORTANT]
-This repository is part of a research project for a thesis. Don't use it for production yet.
+> [!IMPORTANT]
+> This repository is part of a research project for a thesis. Don't use it for production yet.
 
 # A11y_matchers
 
