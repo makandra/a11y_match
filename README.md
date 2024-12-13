@@ -27,7 +27,7 @@ Assuming that you're using Rails, add this to your application's `Gemfile`:
 
 ```ruby
 group :test do
-  gem 'a11y_matchers', path: '~/repos/ma/a11y_matchers'
+  gem 'a11y_matchers', :git => 'https://github.com/makandra/a11y_matchers.git'
 end
 ```
 
@@ -76,7 +76,7 @@ After the installation, the accessibility testing tools can be run by using the 
 # Runs all Tools
 expect(page).not_to have_a11y_issues
 
-# `have_a11y_issues` corresponds to calling all the matchers individually
+# `have_a11y_issues` is equal to calling all the matchers individually
 # in an `aggregate_failures` block  as below
 aggregate_failures "a11y issues" do
   expect(page).not_to have_alfa_issues
@@ -194,7 +194,7 @@ A11yMatchers.configure do |config|
   config.on_violation = :fail # Other options: :log
   config.on_warning = :ignore # Other options: :fail | :log
   config.audit_wait_time = 10 # Maximum runtime of tools before a timeout occurs
-  config.log_directory = "" # Defaults to RAILS_ROOT/log for rails projects and otherwise to the gem root directory
+  config.log_directory = "/tmp/log/a11y_test_log.txt" # Defaults to RAILS_ROOT/log for rails projects and otherwise to the gem root directory
 end
 ```
 
@@ -217,10 +217,10 @@ A11yMatchers.configure do |config|
   config.alfa.enabled = true
 
   # Controls which rules are run by the tool, see below for possible values for each tool
-  config.alfa.included_rules = [] # default value is tool specific
+  config.alfa.included_rules = [:wcag_aa] # default value is tool specific
 
   # Exclude specific rules from being run by the tool by their id
-  config.alfa.excluded_rules = []
+  config.alfa.excluded_rules = ["SIA-R1"]
 end
 ```
 
@@ -253,17 +253,31 @@ end
 - Default value for included_rules: `[:wcag_aa]`
 - Rule IDs (to include and exclude rules): of format `"Principle1.Guideline1_1.1_1_1"`, see the [list of rules](https://github.com/a11ywatch/kayle/blob/main/fast_htmlcs/Standards/WCAG2AAA/ruleset.ts)
 
-## Contributing
+## Development
 
-TBD
+Currently, all JavaScript tools must be installed, bundled and checked into the Git Repository after every change of the gem. This might change in the future (see the TODOs).
+
+Therefore, to make changes of the Gem, one must do the following:
+
+- Install Ruby dependencies `bundle install`
+- Install node dependencies `yarn install`
+- After changing code within the `assets/*.js` files:
+  - Run `yarn build` which uses esbuild to bundle the files in `assets/` into the files within the `assets/build` folder.
+  - The bundled files must be checked in to git so that git installs of the Gem work
 
 ## TODOs
 
-TBD
+- [ ] Add more tests, especially for the configuration
+- [ ] Extract the JS code into a standalone NPM package to avoid vendoring the JS dependencies within this Gem
+- [ ] Integrate more tools, such as [IBM's equal-access](https://github.com/IBMa/equal-access)
+- [ ] Generate [EARL](https://www.w3.org/WAI/standards-guidelines/earl/) reports during tests that contain all findings from all tools. They may be loaded into the [WCAG-EM](https://www.w3.org/WAI/eval/report-tool/) report tool as a starting point for audits
+  - Alfa, Axe and QualWeb already support output in EARL, but they differ slightly
+- [ ] Mark elements containing errors to make them visible in Capybara Screenshot
+- [ ] Allow configuring the accessibility tools to scan only selected elements instead of always the full page
 
 ## License
 
-This gem's code is open source under the terms of the [MIT License](https://opensource.org/licenses/MIT)
+This gem's code is open-source under the terms of the [MIT License](https://opensource.org/licenses/MIT)
 
 Currently, the JavaScript code of all accessibility testing tools is bundled within this gem.
 Therefore, it contains code licensed by other licenses of the projects listed here.
